@@ -3,6 +3,8 @@
         android:label="czy_dojade"
         android:name="${applicationName}"
         android:icon="@mipmap/ic_launcher">
+        <meta-data android:name="com.google.android.geo.API_KEY"
+            android:value="AIzaSyAfKGrxTl5wm4WJ5ffkoUIPYU_e-Qml0Y0"/>
         <activity
             android:name=".MainActivity"
             android:exported="true"

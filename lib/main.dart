@@ -1,3 +1,4 @@
+import 'package:czy_dojade/screens/home_screen.dart';
 import 'package:flutter/material.dart';
 
 void main() {
@@ -15,26 +16,8 @@ class MyApp extends StatelessWidget {
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
         useMaterial3: true,
       ),
-      home: const MyHomePage(title: 'Czy dojade'),
+      home: MyHomeScreen(title: 'Czy dojade'),
     );
   }
 }
 
-class MyHomePage extends StatelessWidget {
-  const MyHomePage({super.key, required this.title});
-
-  final String title;
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        backgroundColor: Theme.of(context).colorScheme.inversePrimary,
-        title: Text(title),
-      ),
-      body: const Center(
-        child: Text('Czy dojade'),
-      ),
-    );
-  }
-}
