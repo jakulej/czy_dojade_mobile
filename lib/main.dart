@@ -13,11 +13,21 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: 'Czy dojade',
       theme: ThemeData(
-        colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
+        colorScheme: ColorScheme.fromSeed(
+          seedColor: Colors.black,
+          brightness: Brightness.dark,
+          secondary: Colors.black,
+          background: Colors.black,
+          error: Colors.black,
+          errorContainer: Colors.black,
+          onPrimary: Colors.black,
+          onPrimaryContainer: Colors.white,
+          primaryContainer: Colors.black,
+          primary: Colors.black,
+        ),
         useMaterial3: true,
       ),
       home: MyHomeScreen(title: 'Czy dojade'),
     );
   }
 }
-
