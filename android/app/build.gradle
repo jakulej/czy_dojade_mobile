@@ -49,6 +49,13 @@ android {
         targetSdkVersion flutter.targetSdkVersion
         versionCode flutterVersionCode.toInteger()
         versionName flutterVersionName
+
+
+        Properties properties = new Properties()
+        properties.load(project.rootProject.file("local.properties").newDataInputStream())
+
+        //return empty key in case something goes wrong
+        manifestPlaceholders += [MAPS_KEY: "${properties.getProperty('googleMapsApiKey')}"]
     }
 
     buildTypes {
