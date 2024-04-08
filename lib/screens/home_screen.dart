@@ -15,6 +15,7 @@ class MyHomeScreen extends StatefulWidget {
 }
 
 class _MyHomeScreenState extends State<MyHomeScreen> {
+  final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
   final Completer<GoogleMapController> _controller =
       Completer<GoogleMapController>();
 
@@ -39,6 +40,7 @@ class _MyHomeScreenState extends State<MyHomeScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      key: _scaffoldKey,
       body: Stack(
         children: [
           GoogleMap(
@@ -51,12 +53,30 @@ class _MyHomeScreenState extends State<MyHomeScreen> {
             zoomControlsEnabled: false,
           ),
           SafeArea(child: _searchAndFilterBar()),
+          Align(
+            alignment: Alignment.centerLeft,
+            child: Material(
+              borderRadius: const BorderRadius.only(topRight: Radius.circular(12), bottomRight: Radius.circular(12)),
+              child: InkWell(
+                borderRadius: const BorderRadius.only(topRight: Radius.circular(12), bottomRight: Radius.circular(12)),
+                onTap: () {
+                  _scaffoldKey.currentState?.openDrawer();
+                },
+                child: const SizedBox(
+                  height: 80,
+                  width: 30,
+                  child: Icon(Icons.chevron_right),
+                ),
+              ),
+            ),
+          ),
         ],
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () {},
         child: const Icon(Icons.filter_alt),
       ),
+      drawer: _drawer(),
     );
   }
 
@@ -89,6 +109,52 @@ class _MyHomeScreenState extends State<MyHomeScreen> {
           ),
         )
       ],
+    );
+  }
+
+  _drawer() {
+    return Container(
+      color: Colors.white,
+      width: 250,
+      child:  SafeArea(
+        child: Column(
+          children: [
+            const ListTile(
+              leading: Icon(Icons.account_circle, size: 56,),
+              title: Text('John Doe', style: TextStyle(fontSize: 24),),
+              iconColor: Colors.black,
+              textColor: Colors.black,
+            ),
+            const Divider(thickness: 3,),
+            ListTile(
+              leading: const Icon(Icons.manage_accounts_rounded, size: 52,),
+              title: const Text('Profile', style: TextStyle(fontSize: 18),),
+              onTap: () {
+              },
+              iconColor: Colors.black,
+              textColor: Colors.black,
+            ),
+            const Divider(),
+            ListTile(
+              leading: const Icon(Icons.settings, size: 52,),
+              title: const Text('Settings', style: TextStyle(fontSize: 18),),
+              onTap: () {},
+              iconColor: Colors.black,
+              textColor: Colors.black,
+            ),
+            const Divider(),
+            const Expanded(child: SizedBox()),
+            const Divider(),
+            ListTile(
+              leading: const Icon(Icons.power_settings_new, size: 52,),
+              title: const Text('Sign out', style: TextStyle(fontSize: 18),),
+              onTap: () {},
+              iconColor: Colors.red,
+              textColor: Colors.red,
+            ),
+          ],
+        ),
+      ),
     );
   }
 }
