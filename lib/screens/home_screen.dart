@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:czy_dojade/widgets/lines_bottom_sheet.dart';
 import 'package:flutter/material.dart' hide FilterChip;
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 
@@ -73,7 +74,9 @@ class _MyHomeScreenState extends State<MyHomeScreen> {
         ],
       ),
       floatingActionButton: FloatingActionButton(
-        onPressed: () {},
+        onPressed: () {
+          showLinesFilterBottomSheet(context: context);
+        },
         child: const Icon(Icons.filter_alt),
       ),
       drawer: _drawer(),
