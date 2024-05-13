@@ -14,16 +14,7 @@ class MyApp extends StatelessWidget {
       title: 'Czy dojade',
       theme: ThemeData(
         colorScheme: ColorScheme.fromSeed(
-          seedColor: Colors.black,
-          brightness: Brightness.dark,
-          secondary: Colors.black,
-          background: Colors.black,
-          error: Colors.black,
-          errorContainer: Colors.black,
-          onPrimary: Colors.black,
-          onPrimaryContainer: Colors.white,
-          primaryContainer: Colors.black,
-          primary: Colors.black,
+          seedColor: const Color(0xff0049B7)
         ),
         useMaterial3: true,
       ),

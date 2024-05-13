@@ -11,12 +11,13 @@ class FilterChip extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    ThemeData theme = Theme.of(context);
     return Padding(
       padding: const EdgeInsets.all(6),
       child: Material(
         elevation: 4,
         borderRadius: BorderRadius.circular(12),
-        color: isSelected ? Colors.black : Colors.grey,
+        color: isSelected ? theme.primaryColor : theme.primaryColorLight,
         child: InkWell(
           borderRadius: BorderRadius.circular(12),
           onTap: onTap,
