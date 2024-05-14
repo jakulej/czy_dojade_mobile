@@ -7,7 +7,6 @@ class AuthRepository {
   User? _user;
   final String baseUrl;
 
-
   AuthRepository(this.baseUrl);
 
   User? get user => _user;
@@ -15,8 +14,7 @@ class AuthRepository {
   Future<User> createUserWithEmail(
       String email, String password, String name, String lastName) async {
     final result = await http.post(
-      Uri.parse(
-          '$baseUrl/api/auth/register'),
+      Uri.parse('$baseUrl/api/auth/register'),
       headers: <String, String>{
         'Content-Type': 'application/json; charset=UTF-8',
       },
@@ -29,7 +27,7 @@ class AuthRepository {
     );
     if (result.statusCode == 200) {
       _user = User.fromJson(jsonDecode(result.body));
-      _user = await getMe() ?? _user;
+      await getMe();
       return user!;
     } else {
       throw AuthException(message: 'Failed to register');
@@ -38,8 +36,7 @@ class AuthRepository {
 
   Future<User> loginEmail(String email, String password) async {
     final result = await http.post(
-      Uri.parse(
-          '$baseUrl/api/auth/authenticate'),
+      Uri.parse('$baseUrl/api/auth/authenticate'),
       headers: <String, String>{
         'Content-Type': 'application/json; charset=UTF-8',
       },
@@ -50,27 +47,24 @@ class AuthRepository {
     );
     if (result.statusCode == 200) {
       _user = User.fromJson(jsonDecode(result.body));
-      _user = await getMe() ?? _user;
+      await getMe();
       return user!;
     } else {
       throw AuthException(message: 'Failed to login');
     }
   }
 
-  Future<User?> getMe() async {
-    final result = await http.get(
-      Uri.parse(
-          '$baseUrl/api/user/me'),
-      headers: <String, String>{
-        'Content-Type': 'application/json; charset=UTF-8',
-        'Authorization': 'Bearer ${_user!.token}'
-      }
-    );
+  Future<void> getMe() async {
+    final result = await http
+        .get(Uri.parse('$baseUrl/api/user/me'), headers: <String, String>{
+      'Content-Type': 'application/json; charset=UTF-8',
+      'Authorization': 'Bearer ${_user!.token}'
+    });
     if (result.statusCode == 200) {
-      _user = User.fullFromJson(jsonDecode(result.body));
-      return user;
+      _user?.fillFromJson(jsonDecode(result.body));
+      return;
     }
-    return null;
+    return;
   }
 }
 

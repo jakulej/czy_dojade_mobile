@@ -8,16 +8,14 @@ import 'package:google_maps_flutter/google_maps_flutter.dart';
 import '../models/transport.dart';
 import '../widgets/filter_chip.dart';
 
-class MyHomeScreen extends StatefulWidget {
-  const MyHomeScreen({super.key, required this.title});
-
-  final String title;
+class HomeScreen extends StatefulWidget {
+  const HomeScreen({super.key});
 
   @override
-  State<MyHomeScreen> createState() => _MyHomeScreenState();
+  State<HomeScreen> createState() => _HomeScreenState();
 }
 
-class _MyHomeScreenState extends State<MyHomeScreen> {
+class _HomeScreenState extends State<HomeScreen> {
   List<Transport> transports = [];
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
   final Completer<GoogleMapController> _controller =
