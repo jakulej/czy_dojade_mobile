@@ -1,8 +1,11 @@
 import 'dart:async';
 import 'dart:convert';
 
+import 'package:czy_dojade/repositories/auth_repository.dart';
+import 'package:czy_dojade/screens/login_screen.dart';
 import 'package:czy_dojade/widgets/lines_bottom_sheet.dart';
 import 'package:flutter/material.dart' hide FilterChip;
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 
 import '../models/transport.dart';
@@ -16,6 +19,7 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
+  bool isLoggedIn = false;
   List<Transport> transports = [];
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
   final Completer<GoogleMapController> _controller =
@@ -42,8 +46,12 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   void initState() {
     loadTransports();
+    refreshLoginState();
     super.initState();
   }
+
+  refreshLoginState() =>
+      isLoggedIn = context.read<AuthRepository>().isLoggedIn;
 
   loadTransports() async {
     String data = await DefaultAssetBundle.of(context)
@@ -99,7 +107,7 @@ class _HomeScreenState extends State<HomeScreen> {
         },
         child: const Icon(Icons.filter_alt),
       ),
-      drawer: _drawer(),
+      drawer: _drawer(context),
     );
   }
 
@@ -135,7 +143,7 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
 
-  _drawer() {
+  _drawer(BuildContext ctx) {
     return Container(
       color: Colors.white,
       width: 250,
@@ -192,13 +200,15 @@ class _HomeScreenState extends State<HomeScreen> {
                 Icons.power_settings_new,
                 size: 52,
               ),
-              title: const Text(
-                'Sign out',
-                style: TextStyle(fontSize: 18),
+              title:  Text(
+                isLoggedIn ? 'Sign out' : 'Log in',
+                style: const TextStyle(fontSize: 18),
               ),
-              onTap: () {},
-              iconColor: Colors.red,
-              textColor: Colors.red,
+              onTap: () {
+                Navigator.of(ctx).push(MaterialPageRoute(builder: (_) => LoginScreen()));
+              },
+              iconColor: isLoggedIn ? null : Colors.red,
+              textColor: isLoggedIn ? null : Colors.red,
             ),
           ],
         ),

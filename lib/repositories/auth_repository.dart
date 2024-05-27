@@ -10,6 +10,7 @@ class AuthRepository {
   AuthRepository(this.baseUrl);
 
   User? get user => _user;
+  bool get isLoggedIn => _user != null;
 
   Future<User> createUserWithEmail(
       String email, String password, String name, String lastName) async {

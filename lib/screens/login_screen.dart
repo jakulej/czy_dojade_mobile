@@ -1,6 +1,7 @@
 import 'package:bloc_widgets/bloc_widgets.dart';
 import 'package:czy_dojade/helpers/string_ext.dart';
 import 'package:czy_dojade/screens/home_screen.dart';
+import 'package:czy_dojade/screens/register_screen.dart';
 import 'package:czy_dojade/widgets/logo_widget.dart';
 import 'package:flutter/material.dart';
 
@@ -46,7 +47,7 @@ class LoginScreen extends BlocConsumerWidget<LoginCubit, LoginState> {
               const SizedBox(
                 height: 46,
               ),
-              ..._form(bloc, theme),
+              ..._form(bloc, theme, context),
                Padding(
                 padding: const EdgeInsets.all(16.0),
                 child: Divider(
@@ -62,7 +63,7 @@ class LoginScreen extends BlocConsumerWidget<LoginCubit, LoginState> {
                   ),
                 ),
                 onTap: () {
-                  // Navigator.of(context).push(MaterialPageRoute(builder: (_) => RegisterScreen()));
+                  Navigator.of(context).push(MaterialPageRoute(builder: (_) => RegisterScreen()));
                 },
               ),
             ],
@@ -72,7 +73,7 @@ class LoginScreen extends BlocConsumerWidget<LoginCubit, LoginState> {
     );
   }
 
-  _form(LoginCubit bloc, ThemeData theme) {
+  _form(LoginCubit bloc, ThemeData theme, BuildContext context) {
     return [
       TextFormField(
         key: emailKey,
@@ -135,7 +136,6 @@ class LoginScreen extends BlocConsumerWidget<LoginCubit, LoginState> {
             ),
           ),
           onTap: () {
-            // Navigator.of(context).push(MaterialPageRoute(builder: (_) => RegisterScreen()));
           },
         ),
       ),
