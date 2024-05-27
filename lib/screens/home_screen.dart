@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:convert';
 
+import 'package:czy_dojade/models/user.dart';
 import 'package:czy_dojade/repositories/auth_repository.dart';
 import 'package:czy_dojade/screens/login_screen.dart';
 import 'package:czy_dojade/widgets/lines_bottom_sheet.dart';
@@ -24,6 +25,7 @@ class _HomeScreenState extends State<HomeScreen> {
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
   final Completer<GoogleMapController> _controller =
       Completer<GoogleMapController>();
+  User? user;
 
   static const CameraPosition _breslau = CameraPosition(
       bearing: 0, target: LatLng(51.1094948, 17.0244067), tilt: 0, zoom: 14.04);
@@ -50,8 +52,10 @@ class _HomeScreenState extends State<HomeScreen> {
     super.initState();
   }
 
-  refreshLoginState() =>
-      isLoggedIn = context.read<AuthRepository>().isLoggedIn;
+  refreshLoginState() {
+    isLoggedIn = context.read<AuthRepository>().isLoggedIn;
+    user = context.read<AuthRepository>().user;
+  }
 
   loadTransports() async {
     String data = await DefaultAssetBundle.of(context)
@@ -150,14 +154,16 @@ class _HomeScreenState extends State<HomeScreen> {
       child: SafeArea(
         child: Column(
           children: [
-            const ListTile(
-              leading: Icon(
+            ListTile(
+              leading: const Icon(
                 Icons.account_circle,
                 size: 56,
               ),
               title: Text(
-                'John Doe',
-                style: TextStyle(fontSize: 24),
+                isLoggedIn
+                    ? '${user?.name} ${user?.lastName}'
+                    : 'Not logged in',
+                style: const TextStyle(fontSize: 24),
               ),
               iconColor: Colors.black,
               textColor: Colors.black,
@@ -200,15 +206,17 @@ class _HomeScreenState extends State<HomeScreen> {
                 Icons.power_settings_new,
                 size: 52,
               ),
-              title:  Text(
+              title: Text(
                 isLoggedIn ? 'Sign out' : 'Log in',
                 style: const TextStyle(fontSize: 18),
               ),
               onTap: () {
-                Navigator.of(ctx).push(MaterialPageRoute(builder: (_) => LoginScreen()));
+                Navigator.of(ctx)
+                    .push(MaterialPageRoute(builder: (_) => LoginScreen()))
+                    .then((_) => refreshLoginState());
               },
-              iconColor: isLoggedIn ? null : Colors.red,
-              textColor: isLoggedIn ? null : Colors.red,
+              iconColor: !isLoggedIn ? null : Colors.red,
+              textColor: !isLoggedIn ? null : Colors.red,
             ),
           ],
         ),
