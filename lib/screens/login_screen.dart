@@ -36,37 +36,43 @@ class LoginScreen extends BlocConsumerWidget<LoginCubit, LoginState> {
   Widget build(context, bloc, state) {
     final theme = Theme.of(context);
     return Scaffold(
-      body: Form(
-        key: formKey,
-        child: Padding(
-          padding: const EdgeInsets.all(32.0),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              const LogoWidget(size: 250),
-              const SizedBox(
-                height: 46,
-              ),
-              ..._form(bloc, theme, context),
-               Padding(
-                padding: const EdgeInsets.all(16.0),
-                child: Divider(
-                  color: theme.primaryColorLight,
+      body: SafeArea(
+        child: Center(
+          child: SingleChildScrollView(
+            child: Form(
+              key: formKey,
+              child: Padding(
+                padding: const EdgeInsets.all(32.0),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    const LogoWidget(size: 250),
+                    const SizedBox(
+                      height: 46,
+                    ),
+                    ..._form(bloc, theme, context),
+                     Padding(
+                      padding: const EdgeInsets.all(16.0),
+                      child: Divider(
+                        color: theme.primaryColorLight,
+                      ),
+                    ),
+                    InkWell(
+                      child: const Text(
+                        'Don\'t have an account? Create one now!',
+                        style: TextStyle(
+                          fontSize: 16,
+                          decoration: TextDecoration.underline,
+                        ),
+                      ),
+                      onTap: () {
+                        Navigator.of(context).push(MaterialPageRoute(builder: (_) => RegisterScreen()));
+                      },
+                    ),
+                  ],
                 ),
               ),
-              InkWell(
-                child: const Text(
-                  'Don\'t have an account? Create one now!',
-                  style: TextStyle(
-                    fontSize: 16,
-                    decoration: TextDecoration.underline,
-                  ),
-                ),
-                onTap: () {
-                  Navigator.of(context).push(MaterialPageRoute(builder: (_) => RegisterScreen()));
-                },
-              ),
-            ],
+            ),
           ),
         ),
       ),

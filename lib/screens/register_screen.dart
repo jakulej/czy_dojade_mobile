@@ -45,35 +45,41 @@ class RegisterScreen extends BlocConsumerWidget<RegisterCubit, RegisterState> {
     final theme = Theme.of(context);
 
     return Scaffold(
-      body: Padding(
-        padding: const EdgeInsets.all(32.0),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            const LogoWidget(size: 250),
-            const SizedBox(
-              height: 46,
-            ),
-            _form(bloc, theme),
-            Padding(
-              padding: const EdgeInsets.all(16.0),
-              child: Divider(
-                color: theme.primaryColorLight,
-              ),
-            ),
-            InkWell(
-              child: const Text(
-                'Already have an account? Login here!',
-                  style: TextStyle(
-                    fontSize: 16,
-                    decoration: TextDecoration.underline,
+      body: SafeArea(
+        child: Padding(
+          padding: const EdgeInsets.all(32.0),
+          child: Center(
+            child: SingleChildScrollView(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  const LogoWidget(size: 250),
+                  const SizedBox(
+                    height: 46,
                   ),
+                  _form(bloc, theme),
+                  Padding(
+                    padding: const EdgeInsets.all(16.0),
+                    child: Divider(
+                      color: theme.primaryColorLight,
+                    ),
+                  ),
+                  InkWell(
+                    child: const Text(
+                      'Already have an account? Login here!',
+                        style: TextStyle(
+                          fontSize: 16,
+                          decoration: TextDecoration.underline,
+                        ),
+                    ),
+                    onTap: () {
+                      Navigator.pop(context);
+                    },
+                  ),
+                ],
               ),
-              onTap: () {
-                Navigator.pop(context);
-              },
             ),
-          ],
+          ),
         ),
       ),
     );
@@ -128,10 +134,7 @@ class RegisterScreen extends BlocConsumerWidget<RegisterCubit, RegisterState> {
                 const SizedBox(height: 16),
                 TextFormField(
                   key: emailKey,
-                  style:
-                      const TextStyle(color: Color(0xFFB1E3F9), fontSize: 20),
                   keyboardType: TextInputType.emailAddress,
-                  textAlign: TextAlign.center,
                   decoration: InputDecoration(
                     border: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(16),
@@ -150,9 +153,6 @@ class RegisterScreen extends BlocConsumerWidget<RegisterCubit, RegisterState> {
                 const SizedBox(height: 16),
                 TextFormField(
                   key: passwordKey,
-                  style:
-                      const TextStyle(color: Color(0xFFB1E3F9), fontSize: 20),
-                  textAlign: TextAlign.center,
                   obscureText: obscured,
                   decoration: InputDecoration(
                     labelText: 'Password',
@@ -181,9 +181,6 @@ class RegisterScreen extends BlocConsumerWidget<RegisterCubit, RegisterState> {
                 const SizedBox(height: 16),
                 TextFormField(
                   key: repeatKey,
-                  style:
-                      const TextStyle(color: Color(0xFFB1E3F9), fontSize: 20),
-                  textAlign: TextAlign.center,
                   obscureText: obscured,
                   decoration: InputDecoration(
                     labelText: 'Password',

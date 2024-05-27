@@ -26,7 +26,7 @@ class AuthRepository {
         'lastName': lastName,
       }),
     );
-    if (result.statusCode == 200) {
+    if (result.statusCode == 201) {
       _user = User.fromJson(jsonDecode(result.body));
       await getMe();
       return user!;
