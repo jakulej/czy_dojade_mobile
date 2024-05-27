@@ -1,9 +1,11 @@
 import 'dart:async';
 import 'dart:convert';
 
+import 'package:auto_route/auto_route.dart';
 import 'package:czy_dojade/models/user.dart';
 import 'package:czy_dojade/repositories/auth_repository.dart';
 import 'package:czy_dojade/screens/login_screen.dart';
+import 'package:czy_dojade/screens/profile_screen.dart';
 import 'package:czy_dojade/widgets/lines_bottom_sheet.dart';
 import 'package:flutter/material.dart' hide FilterChip;
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -180,7 +182,9 @@ class _HomeScreenState extends State<HomeScreen> {
                 'Profile',
                 style: TextStyle(fontSize: 18),
               ),
-              onTap: () {},
+              onTap: () {
+                Navigator.of(context).push(MaterialPageRoute(builder: (_) => ProfileScreen()));
+              },
               iconColor: Colors.black,
               textColor: Colors.black,
             ),
