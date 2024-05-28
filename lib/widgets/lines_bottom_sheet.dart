@@ -11,8 +11,8 @@ Future<void> showLinesFilterBottomSheet({
   final List<Transport> trans = List.of(transports);
   final Set<String> ids = {};
   trans.retainWhere((trans) => ids.add(trans.routeId));
-  trans.sort((a,b) {
-    if(a.routeId.length != b.routeId.length){
+  trans.sort((a, b) {
+    if (a.routeId.length != b.routeId.length) {
       return a.routeId.length.compareTo(b.routeId.length);
     } else {
       return a.routeId.compareTo(b.routeId);
@@ -33,66 +33,89 @@ Future<void> showLinesFilterBottomSheet({
           child: DraggableScrollableSheet(
             initialChildSize: 1,
             minChildSize: 1,
-            // maxChildSize: 0.6,
             expand: true,
             builder: (ctx, scrlController) {
-              return ValueListenableBuilder(valueListenable: routesToSkip, builder: (_,toSkip, ___) => ListView(
-                // crossAxisAlignment: CrossAxisAlignment.start,
-                controller: scrlController,
-                children: [
-                  const Padding(
-                    padding: EdgeInsets.symmetric(horizontal: 100.0),
-                    child: Divider(
-                      thickness: 3,
-                    ),
-                  ),
-                  const Text(
-                    'Buses:',
-                    style: TextStyle(
-                      color: Colors.black,
-                    ),
-                  ),
-                  Wrap(
-                    children: trans
-                        .where((trans) => trans.type == 3)
-                        .map(
-                          (trans) => Padding(
-                        padding: const EdgeInsets.all(4.0),
-                        child: FilterChip(
-                          selected: !toSkip.contains(trans.routeId),
-                          label: Text(trans.routeId),
-                          onSelected: (_) {
-                            onTap(trans);
-                          },
-                        ),
+              return ValueListenableBuilder(
+                  valueListenable: routesToSkip,
+                  builder: (_, toSkip, ___) => Column(
+                    children: [
+                      Expanded(
+                        child: ListView(
+                              controller: scrlController,
+                              children: [
+                                const Padding(
+                                  padding: EdgeInsets.symmetric(horizontal: 100.0),
+                                  child: Divider(
+                                    thickness: 3,
+                                  ),
+                                ),
+                                const Text(
+                                  'Buses:',
+                                  style: TextStyle(
+                                    color: Colors.black,
+                                  ),
+                                ),
+                                Wrap(
+                                  children: trans
+                                      .where((trans) => trans.type == 3)
+                                      .map(
+                                        (trans) => Padding(
+                                          padding: const EdgeInsets.all(4.0),
+                                          child: FilterChip(
+                                            selected: !toSkip.contains(trans.routeId),
+                                            label: Text(trans.routeId),
+                                            onSelected: (_) {
+                                              onTap(trans);
+                                            },
+                                          ),
+                                        ),
+                                      )
+                                      .toList(),
+                                ),
+                                const Text(
+                                  'Trams:',
+                                  style: TextStyle(color: Colors.black),
+                                ),
+                                Wrap(
+                                  children: trans
+                                      .where((trans) => trans.type == 0)
+                                      .toSet()
+                                      .map(
+                                        (trans) => Padding(
+                                          padding: const EdgeInsets.all(4.0),
+                                          child: FilterChip(
+                                            selected: !toSkip.contains(trans.routeId),
+                                            label: Text(trans.routeId),
+                                            onSelected: (_) {
+                                              onTap(trans);
+                                            },
+                                          ),
+                                        ),
+                                      )
+                                      .toList(),
+                                ),
+                              ],
+                            ),
                       ),
-                    )
-                        .toList(),
-                  ),
-                  const Text(
-                    'Trams:',
-                    style: TextStyle(color: Colors.black),
-                  ),
-                  Wrap(
-                    children: trans
-                        .where((trans) => trans.type == 0)
-                        .toSet()
-                        .map(
-                          (trans) => Padding(
-                        padding: const EdgeInsets.all(4.0),
-                        child: FilterChip(
-                          selected: !toSkip.contains(trans.routeId),
-                          label: Text(trans.routeId),
-                          onSelected: (_) {
-                            onTap(trans);
-                          },
-                        ),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceAround,
+                        children: [
+                          ElevatedButton(
+                            onPressed: () {
+                              routesToSkip.value = {};
+                            },
+                            child: Text('Select all'),
+                          ),
+                          ElevatedButton(
+                            onPressed: () {
+                              routesToSkip.value = trans.map((trans) => trans.routeId).toSet();
+                            },
+                            child: Text('Unselect all'),
+                          ),
+                        ],
                       ),
-                    )
-                        .toList(),
-                  ),
-                ],
-              ));
+                    ],
+                  ));
             },
           ),
         );

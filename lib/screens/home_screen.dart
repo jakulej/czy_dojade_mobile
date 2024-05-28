@@ -55,6 +55,7 @@ class _HomeScreenState extends State<HomeScreen> {
   void initState() {
     loadTransports();
     refreshLoginState();
+    routesToSkip.addListener(filterTransportsToShow);
     super.initState();
   }
 
