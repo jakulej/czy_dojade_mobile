@@ -30,6 +30,7 @@ Future<void> showLinesFilterBottomSheet({
               top: Radius.circular(16),
             ),
           ),
+          padding: const EdgeInsets.symmetric(horizontal: 12),
           child: DraggableScrollableSheet(
             initialChildSize: 1,
             minChildSize: 1,
@@ -38,13 +39,14 @@ Future<void> showLinesFilterBottomSheet({
               return ValueListenableBuilder(
                   valueListenable: routesToSkip,
                   builder: (_, toSkip, ___) => Column(
-                    children: [
-                      Expanded(
-                        child: ListView(
+                        children: [
+                          Expanded(
+                            child: ListView(
                               controller: scrlController,
                               children: [
                                 const Padding(
-                                  padding: EdgeInsets.symmetric(horizontal: 100.0),
+                                  padding:
+                                      EdgeInsets.symmetric(horizontal: 100.0),
                                   child: Divider(
                                     thickness: 3,
                                   ),
@@ -53,6 +55,7 @@ Future<void> showLinesFilterBottomSheet({
                                   'Buses:',
                                   style: TextStyle(
                                     color: Colors.black,
+                                    fontSize: 24,
                                   ),
                                 ),
                                 Wrap(
@@ -62,7 +65,8 @@ Future<void> showLinesFilterBottomSheet({
                                         (trans) => Padding(
                                           padding: const EdgeInsets.all(4.0),
                                           child: FilterChip(
-                                            selected: !toSkip.contains(trans.routeId),
+                                            selected:
+                                                !toSkip.contains(trans.routeId),
                                             label: Text(trans.routeId),
                                             onSelected: (_) {
                                               onTap(trans);
@@ -74,7 +78,10 @@ Future<void> showLinesFilterBottomSheet({
                                 ),
                                 const Text(
                                   'Trams:',
-                                  style: TextStyle(color: Colors.black),
+                                  style: TextStyle(
+                                    color: Colors.black,
+                                    fontSize: 24,
+                                  ),
                                 ),
                                 Wrap(
                                   children: trans
@@ -84,7 +91,8 @@ Future<void> showLinesFilterBottomSheet({
                                         (trans) => Padding(
                                           padding: const EdgeInsets.all(4.0),
                                           child: FilterChip(
-                                            selected: !toSkip.contains(trans.routeId),
+                                            selected:
+                                                !toSkip.contains(trans.routeId),
                                             label: Text(trans.routeId),
                                             onSelected: (_) {
                                               onTap(trans);
@@ -96,26 +104,28 @@ Future<void> showLinesFilterBottomSheet({
                                 ),
                               ],
                             ),
-                      ),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceAround,
-                        children: [
-                          ElevatedButton(
-                            onPressed: () {
-                              routesToSkip.value = {};
-                            },
-                            child: Text('Select all'),
                           ),
-                          ElevatedButton(
-                            onPressed: () {
-                              routesToSkip.value = trans.map((trans) => trans.routeId).toSet();
-                            },
-                            child: Text('Unselect all'),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceAround,
+                            children: [
+                              ElevatedButton(
+                                onPressed: () {
+                                  routesToSkip.value = {};
+                                },
+                                child: Text('Select all'),
+                              ),
+                              ElevatedButton(
+                                onPressed: () {
+                                  routesToSkip.value = trans
+                                      .map((trans) => trans.routeId)
+                                      .toSet();
+                                },
+                                child: Text('Unselect all'),
+                              ),
+                            ],
                           ),
                         ],
-                      ),
-                    ],
-                  ));
+                      ));
             },
           ),
         );
