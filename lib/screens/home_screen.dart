@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:convert';
 
 import 'package:auto_route/auto_route.dart';
+import 'package:czy_dojade/helpers/set_value_notifier.dart';
 import 'package:czy_dojade/models/user.dart';
 import 'package:czy_dojade/repositories/auth_repository.dart';
 import 'package:czy_dojade/screens/login_screen.dart';
@@ -24,6 +25,9 @@ class HomeScreen extends StatefulWidget {
 class _HomeScreenState extends State<HomeScreen> {
   bool isLoggedIn = false;
   List<Transport> transports = [];
+  List<Transport> transportsToShow = [];
+  SetValueNotifier<Set<String>> routesToSkip = SetValueNotifier({});
+
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
   final Completer<GoogleMapController> _controller =
       Completer<GoogleMapController>();
@@ -65,6 +69,20 @@ class _HomeScreenState extends State<HomeScreen> {
     Map<String, dynamic> json = jsonDecode(data)['data'];
     transports = json.values.map((e) => Transport.fromJson(e)).toList();
     setState(() {});
+    filterTransportsToShow();
+  }
+
+  filterTransportsToShow() {
+    transportsToShow = List.of(transports);
+    if (_selections['Bus'] == false) {
+      transportsToShow.removeWhere((trans) => trans.type == 3);
+    }
+    if (_selections['Tram'] == false) {
+      transportsToShow.removeWhere((trans) => trans.type == 0);
+    }
+    transportsToShow
+        .removeWhere((trans) => routesToSkip.value.contains(trans.routeId));
+    setState(() {});
   }
 
   @override
@@ -81,7 +99,7 @@ class _HomeScreenState extends State<HomeScreen> {
             initialCameraPosition: _breslau,
             buildingsEnabled: false,
             zoomControlsEnabled: false,
-            markers: transports.map((e) => e.mapMarker).toSet(),
+            markers: transportsToShow.map((e) => e.mapMarker).toSet(),
           ),
           SafeArea(child: _searchAndFilterBar()),
           Align(
@@ -109,7 +127,19 @@ class _HomeScreenState extends State<HomeScreen> {
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
-          showLinesFilterBottomSheet(context: context);
+          showLinesFilterBottomSheet(
+              context: context,
+              transports: transports,
+              routesToSkip: routesToSkip,
+              onTap: (trans) {
+                if (routesToSkip.value.contains(trans.routeId)) {
+                  routesToSkip.value.remove(trans.routeId);
+                } else {
+                  routesToSkip.value.add(trans.routeId);
+                }
+                routesToSkip.notify();
+                filterTransportsToShow();
+              });
         },
         child: const Icon(Icons.filter_alt),
       ),
@@ -139,6 +169,7 @@ class _HomeScreenState extends State<HomeScreen> {
                           setState(() {
                             _selections.update(e, (value) => !value);
                           });
+                          filterTransportsToShow();
                         },
                       ))
                   .toList(),
@@ -183,7 +214,8 @@ class _HomeScreenState extends State<HomeScreen> {
                 style: TextStyle(fontSize: 18),
               ),
               onTap: () {
-                Navigator.of(context).push(MaterialPageRoute(builder: (_) => ProfileScreen()));
+                Navigator.of(context)
+                    .push(MaterialPageRoute(builder: (_) => ProfileScreen()));
               },
               iconColor: Colors.black,
               textColor: Colors.black,
