@@ -2,15 +2,7 @@ import 'package:flutter/material.dart';
 import '../helpers/list_ext.dart';
 
 class ProfileScreen extends StatelessWidget {
-  ProfileScreen({super.key});
-
-  final Map<String, IconData> tiles = {
-    'Change username': Icons.edit,
-    'Change password': Icons.key,
-    'Set favourite routes': Icons.star,
-    'Buy premium': Icons.monetization_on,
-    'Delete profile': Icons.person_off,
-  };
+  const ProfileScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
