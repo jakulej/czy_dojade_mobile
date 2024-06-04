@@ -38,7 +38,7 @@ Future<void> showLinesFilterBottomSheet({
             builder: (ctx, scrlController) {
               return ValueListenableBuilder(
                   valueListenable: routesToSkip,
-                  builder: (_, toSkip, ___) => Column(
+                  builder: (_, toShow, ___) => Column(
                         children: [
                           Expanded(
                             child: ListView(
@@ -66,7 +66,7 @@ Future<void> showLinesFilterBottomSheet({
                                           padding: const EdgeInsets.all(4.0),
                                           child: FilterChip(
                                             selected:
-                                                !toSkip.contains(trans.routeId),
+                                                toShow.contains(trans.routeId),
                                             label: Text(trans.routeId),
                                             onSelected: (_) {
                                               onTap(trans);
@@ -92,7 +92,7 @@ Future<void> showLinesFilterBottomSheet({
                                           padding: const EdgeInsets.all(4.0),
                                           child: FilterChip(
                                             selected:
-                                                !toSkip.contains(trans.routeId),
+                                                toShow.contains(trans.routeId),
                                             label: Text(trans.routeId),
                                             onSelected: (_) {
                                               onTap(trans);

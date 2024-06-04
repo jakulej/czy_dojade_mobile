@@ -27,7 +27,7 @@ class _HomeScreenState extends State<HomeScreen> {
   bool isLoggedIn = false;
   List<Transport> transports = [];
   List<Transport> transportsToShow = [];
-  SetValueNotifier<Set<String>> routesToSkip = SetValueNotifier({});
+  SetValueNotifier<Set<String>> routesToShow = SetValueNotifier({});
 
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
   final Completer<GoogleMapController> _controller =
@@ -38,25 +38,25 @@ class _HomeScreenState extends State<HomeScreen> {
       bearing: 0, target: LatLng(51.1094948, 17.0244067), tilt: 0, zoom: 14.04);
 
   final Map<String, IconData> _icons = {
-    'Route': Icons.route,
+    // 'Route': Icons.route,
     'Bus': Icons.directions_bus,
     'Tram': Icons.tram,
-    'Bus stop': Icons.signpost_sharp,
-    'Collision': Icons.car_crash
+    // 'Bus stop': Icons.signpost_sharp,
+    // 'Collision': Icons.car_crash
   };
   final Map<String, bool> _selections = {
-    'Route': true,
+    // 'Route': true,
     'Bus': true,
     'Tram': true,
-    'Bus stop': true,
-    'Collision': true
+    // 'Bus stop': true,
+    // 'Collision': true
   };
 
   @override
   void initState() {
     loadTransports();
     refreshLoginState();
-    routesToSkip.addListener(filterTransportsToShow);
+    routesToShow.addListener(filterTransportsToShow);
     super.initState();
   }
 
@@ -83,7 +83,7 @@ class _HomeScreenState extends State<HomeScreen> {
       transportsToShow.removeWhere((trans) => trans.type == 0);
     }
     transportsToShow
-        .removeWhere((trans) => routesToSkip.value.contains(trans.routeId));
+        .retainWhere((trans) => routesToShow.value.contains(trans.routeId));
     setState(() {});
   }
 
@@ -132,14 +132,14 @@ class _HomeScreenState extends State<HomeScreen> {
           showLinesFilterBottomSheet(
               context: context,
               transports: transports,
-              routesToSkip: routesToSkip,
+              routesToSkip: routesToShow,
               onTap: (trans) {
-                if (routesToSkip.value.contains(trans.routeId)) {
-                  routesToSkip.value.remove(trans.routeId);
+                if (!routesToShow.value.contains(trans.routeId)) {
+                  routesToShow.value.add(trans.routeId);
                 } else {
-                  routesToSkip.value.add(trans.routeId);
+                  routesToShow.value.remove(trans.routeId);
                 }
-                routesToSkip.notify();
+                routesToShow.notify();
                 filterTransportsToShow();
               });
         },
