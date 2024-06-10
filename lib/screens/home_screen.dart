@@ -42,14 +42,14 @@ class _HomeScreenState extends State<HomeScreen> {
     'Bus': Icons.directions_bus,
     'Tram': Icons.tram,
     // 'Bus stop': Icons.signpost_sharp,
-    // 'Collision': Icons.car_crash
+    'Collision': Icons.car_crash
   };
   final Map<String, bool> _selections = {
     // 'Route': true,
     'Bus': true,
     'Tram': true,
     // 'Bus stop': true,
-    // 'Collision': true
+    'Collision': false
   };
 
   @override
@@ -63,6 +63,7 @@ class _HomeScreenState extends State<HomeScreen> {
   refreshLoginState() {
     isLoggedIn = context.read<AuthRepository>().isLoggedIn;
     user = context.read<AuthRepository>().user;
+    setState(() {});
   }
 
   loadTransports() async {
@@ -216,8 +217,8 @@ class _HomeScreenState extends State<HomeScreen> {
                 style: TextStyle(fontSize: 18),
               ),
               onTap: () {
-                Navigator.of(context)
-                    .push(MaterialPageRoute(builder: (_) => const ProfileScreen()));
+                Navigator.of(context).push(
+                    MaterialPageRoute(builder: (_) => const ProfileScreen()));
               },
               iconColor: Colors.black,
               textColor: Colors.black,
@@ -233,14 +234,21 @@ class _HomeScreenState extends State<HomeScreen> {
                 style: TextStyle(fontSize: 18),
               ),
               onTap: () {
-                Navigator.of(context)
-                    .push(MaterialPageRoute(builder: (_) => const SettingsScreen()));
+                Navigator.of(context).push(
+                    MaterialPageRoute(builder: (_) => const SettingsScreen()));
               },
               iconColor: Colors.black,
               textColor: Colors.black,
             ),
             const Divider(),
             const Expanded(child: SizedBox()),
+            ListTile(
+              onTap: () => showDialog(
+                  context: ctx,
+                  builder: (BuildContext context) => AlertDialog(
+                        content: Dijalog(),
+                      )),
+            ),
             const Divider(),
             ListTile(
               leading: const Icon(
@@ -252,9 +260,14 @@ class _HomeScreenState extends State<HomeScreen> {
                 style: const TextStyle(fontSize: 18),
               ),
               onTap: () {
-                Navigator.of(ctx)
-                    .push(MaterialPageRoute(builder: (_) => LoginScreen()))
-                    .then((_) => refreshLoginState());
+                if (!isLoggedIn) {
+                  Navigator.of(ctx)
+                      .push(MaterialPageRoute(builder: (_) => LoginScreen()))
+                      .then((_) => refreshLoginState());
+                } else {
+                  context.read<AuthRepository>().logout();
+                  refreshLoginState();
+                }
               },
               iconColor: !isLoggedIn ? null : Colors.red,
               textColor: !isLoggedIn ? null : Colors.red,
@@ -262,6 +275,29 @@ class _HomeScreenState extends State<HomeScreen> {
           ],
         ),
       ),
+    );
+  }
+}
+
+class Dijalog extends StatelessWidget {
+  Dijalog({super.key});
+
+  TextEditingController controller = TextEditingController();
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        TextField(
+          controller: controller,
+        ),
+        ElevatedButton(
+            onPressed: () {
+              AuthRepository.ip = controller.value.text;
+            },
+            child: const Text('Enter'))
+      ],
     );
   }
 }

@@ -5,8 +5,9 @@ import 'package:czy_dojade/screens/home_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
+
 void main() {
-  final auth = AuthRepository('http://192.168.100.8:8080');
+  final auth = AuthRepository();
 
   runApp(
     MultiRepositoryProvider(
